@@ -3,14 +3,14 @@ package ch_07.home;
 public class lst_04_WeeklyHour {
     public static void main(String[] args) {
         int[][] employees = {
-                {2, 4, 3, 4, 5, 8, 8},
-                {7, 3, 4, 3, 3, 4, 4},
-                {3, 3, 4, 3, 3, 2, 2},
-                {9, 3, 4, 7, 3, 4, 1},
-                {3, 5, 4, 3, 6, 3, 8},
-                {3, 4, 4, 6, 3, 4, 4},
-                {3, 7, 4, 8, 3, 8, 4},
-                {6, 3, 5, 9, 2, 7, 9}
+                {2, 4, 3, 4, 5, 8, 8, 0},
+                {7, 3, 4, 3, 3, 4, 4, 0},
+                {3, 3, 4, 3, 3, 2, 2, 0},
+                {9, 3, 4, 7, 3, 4, 1, 0},
+                {3, 5, 4, 3, 6, 3, 8, 0},
+                {3, 4, 4, 6, 3, 4, 4, 0},
+                {3, 7, 4, 8, 3, 8, 4, 0},
+                {6, 3, 5, 9, 2, 7, 9, 0}
         };
 
         int[][] sums = new int[2][employees.length];
@@ -20,11 +20,11 @@ public class lst_04_WeeklyHour {
             sums[1][i] = i;
         }
 
-        print2DArray(sums);
-
         sortEmployees(sums);
 
-        print2DArray(sums);
+        for (int i = 0; i < sums[0].length; i++) {
+            System.out.println("Employee " + sums[1][i] + " works total " + sums[0][i]);
+        }
     }
 
     public static void sortEmployees(int[][] list) {
@@ -41,7 +41,6 @@ public class lst_04_WeeklyHour {
                     currentMaxEmp = list[1][j];
                     currentMaxIndex = j;
                 }
-
             }
 
             if (currentMaxIndex != i) {
