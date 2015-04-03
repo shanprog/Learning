@@ -12,3 +12,5 @@
 *.iml
 out
 src\test
+*.txt
+image
