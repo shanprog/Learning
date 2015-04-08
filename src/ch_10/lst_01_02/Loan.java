@@ -1,6 +1,8 @@
 package ch_10.lst_01_02;
 
-public class Loan {
+import java.io.Serializable;
+
+public class Loan implements Serializable {
     private double annualInterestRate;
     private int numberOfYears;
     private double loanAmount;
