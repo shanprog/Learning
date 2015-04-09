@@ -26,18 +26,17 @@ public class AddressBook extends JFrame {
 
     private RandomAccessFile raf;
 
+    private long seek;
+
     public AddressBook() throws HeadlessException {
 
         try {
             raf = new RandomAccessFile("addressBook.dat", "rw");
-
+            seek = 0;
 
         } catch (IOException ioe) {
 
         }
-
-
-
 
         setTitle("AddressBook");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -71,7 +70,11 @@ public class AddressBook extends JFrame {
         buttonPanel.add(update);
 
         add.addActionListener(new AddAction());
-
+        first.addActionListener(new FirstAction());
+        last.addActionListener(new LastAction());
+        next.addActionListener(new NextAction());
+        previous.addActionListener(new PreviousAction());
+        update.addActionListener(new UpdateAction());
 
         setLayout(new MigLayout());
 
@@ -87,11 +90,29 @@ public class AddressBook extends JFrame {
         add(tfZip, "wrap");
         add(buttonPanel, "span 6");
 
+        fillFields(0);
+
+
         setLocationRelativeTo(this);
         setVisible(true);
         pack();
     }
 
+    private void fillFields(long seek) {
+
+        try {
+            raf.seek(seek);
+
+            tfName.setText(raf.readUTF().trim());
+            tfStreet.setText(raf.readUTF().trim());
+            tfCity.setText(raf.readUTF().trim());
+            tfState.setText(raf.readUTF());
+            tfZip.setText(raf.readUTF());
+
+        } catch (IOException ioe) {
+
+        }
+    }
 
 
     class AddAction implements ActionListener {
@@ -100,23 +121,86 @@ public class AddressBook extends JFrame {
             try {
                 raf.seek(raf.length());
 
-                raf.writeChars(tfName.getText());
-                raf.writeChars(tfStreet.getText());
-                raf.writeChars(tfCity.getText());
-                raf.writeChars(tfState.getText());
-                raf.writeChars(tfZip.getText());
+                Address address = new Address(tfName.getText(),
+                        tfStreet.getText(),
+                        tfCity.getText(),
+                        tfState.getText(),
+                        tfZip.getText());
 
-            } catch (IOException ioe) {}
+                raf.writeUTF(address.getName());
+                raf.writeUTF(address.getStreet());
+                raf.writeUTF(address.getCity());
+                raf.writeUTF(address.getState());
+                raf.writeUTF(address.getZip());
+
+//                System.out.println(raf.length());
+
+            } catch (IOException ioe) {
+            }
         }
     }
 
     class FirstAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            seek = 0;
+            fillFields(seek);
         }
     }
 
+    class LastAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                seek = (raf.length() > 0) ? raf.length() - 95 : 0;
+                fillFields(seek);
+            } catch (IOException ioe) {
+            }
+        }
+    }
+
+    class NextAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                seek = (seek + 95 <= raf.length()) ? seek + 95 : raf.length();
+                fillFields(seek);
+            } catch (IOException ioe) {
+            }
+        }
+    }
+
+    class PreviousAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            seek = (seek - 95 >= 0) ? seek - 95 : 0;
+            fillFields(seek);
+        }
+    }
+
+    class UpdateAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                raf.seek(seek);
+
+                Address address = new Address(tfName.getText(),
+                        tfStreet.getText(),
+                        tfCity.getText(),
+                        tfState.getText(),
+                        tfZip.getText());
+
+                raf.writeUTF(address.getName());
+                raf.writeUTF(address.getStreet());
+                raf.writeUTF(address.getCity());
+                raf.writeUTF(address.getState());
+                raf.writeUTF(address.getZip());
+            }
+            catch (IOException ioe) {
+
+            }
+        }
+    }
 
 
     public static void main(String[] args) {
