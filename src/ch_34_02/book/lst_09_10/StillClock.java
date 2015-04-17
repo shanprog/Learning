@@ -87,7 +87,7 @@ public class StillClock extends JPanel {
         g.drawLine(xCenter, yCenter, xHour, yHour);
     }
 
-    private void setCurrentTime() {
+    public void setCurrentTime() {
         Calendar calendar = new GregorianCalendar();
 
         this.hour = calendar.get(Calendar.HOUR_OF_DAY);
