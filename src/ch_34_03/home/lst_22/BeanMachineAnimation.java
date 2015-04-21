@@ -6,24 +6,39 @@ import java.awt.*;
 public class BeanMachineAnimation extends JFrame {
 
     private Timer timer;
+    private boolean endAnimation;
+    private BeanMachinePanel panel;
+    private int count = 0;
+    private TimerAction timerAction;
+    private Bean bean;
 
     public BeanMachineAnimation() throws HeadlessException {
-        BeanMachinePanel panel = new BeanMachinePanel();
-
-        for (int i = 0; i < 10; i++) {
-            Bean bean = new Bean();
-
-            TimerAction timerAction = new TimerAction(bean, panel, this);
-            timer = new Timer(100, timerAction);
-            timer.start();
-
-            if (bean.getyCenter() > 180) {
-                timer.stop();
-                continue;
-            }
-        }
+        panel = new BeanMachinePanel();
+        timerAction = new TimerAction(panel, this);
+        timer = new Timer(50, timerAction);
+        setBean();
 
         add(panel);
+    }
+
+    public void setBean() {
+        bean = new Bean();
+        timerAction.setBean(bean);
+        endAnimation = false;
+        panel.setBean(bean);
+
+        timer.start();
+    }
+
+    public void stopAnimation() {
+        panel.addInStacks(bean.getPosition());
+        timer.stop();
+        count++;
+
+        if (count < 10)
+            setBean();
+        else
+            panel.hideBean();
     }
 
     public static void main(String[] args) {

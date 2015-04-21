@@ -5,14 +5,12 @@ import java.awt.event.ActionListener;
 
 public class TimerAction implements ActionListener {
 
+    private int leftOrRight = 2;
     private Bean bean;
     private BeanMachinePanel panel;
     private BeanMachineAnimation machine;
-    private int lor = 2;
-    private boolean anim = true;
 
-    public TimerAction(Bean bean, BeanMachinePanel panel, BeanMachineAnimation machine) {
-        this.bean = bean;
+    public TimerAction(BeanMachinePanel panel, BeanMachineAnimation machine) {
         this.panel = panel;
         this.machine = machine;
     }
@@ -22,47 +20,44 @@ public class TimerAction implements ActionListener {
 
         bean.setyCenter(bean.getyCenter() + 2);
 
-//        switch (bean.getyCenter()) {
-//            case 50:
-//            case 70:
-//            case 90:
-//            case 110:
-//            case 130:
-//            case 150:
-//            case 170:
-//                lor = (int) (Math.random() * 2);
-//                break;
-//            case 60:
-//            case 80:
-//            case 100:
-//            case 120:
-//            case 140:
-//            case 160:
-//                lor = 2;
-//                break;
-//            case 180:
-//                lor = 2;
-//                machine.stopAnimation();
-//                break;
-//
-//        }
-//
-//        if (lor == 1) {
-//            bean.addPosition();
-//            bean.setxCenter(bean.getxCenter() + 2);
-//        }
-//        else if (lor == 0)
-//            bean.setxCenter(bean.getxCenter() - 2);
-
-        if (bean.getyCenter() > 180) {
-            anim = false;
+        switch (bean.getyCenter()) {
+            case 50:
+            case 70:
+            case 90:
+            case 110:
+            case 130:
+            case 150:
+            case 170:
+                leftOrRight = (int) (Math.random() * 2);
+                if (leftOrRight == 1)
+                    bean.addPosition();
+                break;
+            case 60:
+            case 80:
+            case 100:
+            case 120:
+            case 140:
+            case 160:
+            case 180:
+                leftOrRight = 2;
+                break;
         }
 
+        if (leftOrRight == 0)
+            bean.setxCenter(bean.getxCenter() - 2);
+        else if (leftOrRight == 1) {
+            bean.setxCenter(bean.getxCenter() + 2);
+        }
 
-        panel.repaintFallBean(bean);
+        panel.repaint();
+
+        if (bean.getyCenter() > 180) {
+            machine.stopAnimation();
+        }
+
     }
 
-    public boolean isAnim() {
-        return anim;
+    public void setBean(Bean bean) {
+        this.bean = bean;
     }
 }

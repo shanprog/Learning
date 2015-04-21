@@ -7,10 +7,14 @@ public class BeanMachinePanel extends JPanel {
 
     private int[] beans;
     private Bean bean;
+    private boolean hide;
 
     public BeanMachinePanel() {
         beans = new int[8];
-        bean = new Bean();
+    }
+
+    public void setBean(Bean bean) {
+        this.bean = bean;
     }
 
     @Override
@@ -20,12 +24,17 @@ public class BeanMachinePanel extends JPanel {
         paintMachine(g);
         paintBeanInStacks(g);
 
-        g.fillOval(bean.getxCenter() - 5, bean.getyCenter() - 5, 10, 10);
+        if (!hide)
+            g.fillOval(bean.getxCenter() - 5, bean.getyCenter() - 5, 10, 10);
     }
 
-//    public void addBeanInStacks(int pos) {
-//        beans[pos]++;
-//    }
+    public void addInStacks(int i) {
+        beans[i]++;
+    }
+
+    public void hideBean() {
+        hide = true;
+    }
 
     private void paintMachine(Graphics g) {
 
@@ -58,12 +67,6 @@ public class BeanMachinePanel extends JPanel {
 
             k += 20;
         }
-
-    }
-
-    public void repaintFallBean(Bean bean) {
-        this.bean = bean;
-        repaint();
     }
 
     @Override
