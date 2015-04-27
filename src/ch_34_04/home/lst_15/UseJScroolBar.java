@@ -1,18 +1,10 @@
 package ch_34_04.home.lst_15;
 
-import javafx.scene.layout.GridPane;
-
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 
 public class UseJScroolBar extends JFrame {
-
-    private JScrollBar redBar;
-    private JScrollBar greenBar;
-    private JScrollBar blueBar;
 
     private JPanel panelText;
 
@@ -20,9 +12,9 @@ public class UseJScroolBar extends JFrame {
 
         setLayout(new GridLayout(2, 1));
 
-        redBar = new JScrollBar(JScrollBar.HORIZONTAL);
-        greenBar = new JScrollBar(JScrollBar.HORIZONTAL);
-        blueBar = new JScrollBar(JScrollBar.HORIZONTAL);
+        JScrollBar redBar = new JScrollBar(JScrollBar.HORIZONTAL);
+        JScrollBar greenBar = new JScrollBar(JScrollBar.HORIZONTAL);
+        JScrollBar blueBar = new JScrollBar(JScrollBar.HORIZONTAL);
 
         redBar.setMinimum(0);
         greenBar.setMinimum(0);
@@ -36,11 +28,31 @@ public class UseJScroolBar extends JFrame {
         redBar.addAdjustmentListener(e -> {
 
             Color fColor = panelText.getForeground();
-            int red = fColor.getRed();
+            int red = e.getValue();
             int green = fColor.getGreen();
             int blue = fColor.getBlue();
 
-            panelText.setForeground(new Color(e.getValue(), green, blue));
+            panelText.setForeground(new Color(red, green, blue));
+        });
+
+        greenBar.addAdjustmentListener(e -> {
+
+            Color fColor = panelText.getForeground();
+            int red = fColor.getRed();
+            int green = e.getValue();
+            int blue = fColor.getBlue();
+
+            panelText.setForeground(new Color(red, green, blue));
+        });
+
+        blueBar.addAdjustmentListener(e -> {
+
+            Color fColor = panelText.getForeground();
+            int red = fColor.getRed();
+            int green = fColor.getGreen();
+            int blue = e.getValue();
+
+            panelText.setForeground(new Color(red, green, blue));
         });
 
         panelText = new JPanel() {
@@ -52,9 +64,6 @@ public class UseJScroolBar extends JFrame {
             }
         };
 
-        JPanel choosePanel = new JPanel();
-        choosePanel.setBorder(new TitledBorder("Choose colors"));
-
         JPanel labelPanel = new JPanel(new GridLayout(3, 1));
         labelPanel.add(new JLabel("Red"));
         labelPanel.add(new JLabel("Green"));
@@ -65,9 +74,10 @@ public class UseJScroolBar extends JFrame {
         scrollsPanel.add(greenBar);
         scrollsPanel.add(blueBar);
 
-
-        choosePanel.add(labelPanel);
-        choosePanel.add(scrollsPanel);
+        JPanel choosePanel = new JPanel(new BorderLayout());
+        choosePanel.setBorder(new TitledBorder("Choose colors"));
+        choosePanel.add(labelPanel, BorderLayout.WEST);
+        choosePanel.add(scrollsPanel, BorderLayout.CENTER);
 
         add(panelText);
         add(choosePanel);
@@ -76,7 +86,7 @@ public class UseJScroolBar extends JFrame {
     public static void main(String[] args) {
         UseJScroolBar frame = new UseJScroolBar();
 
-        frame.setLocationRelativeTo(null); // Center the frame
+        frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Use JScroolBar");
         frame.pack();
